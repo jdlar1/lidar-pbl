@@ -1,7 +1,6 @@
-from lidar_pbl.utils import read_npz, plot_profile, rcs
+from lidar_pbl.utils import read_npz, plot_profile, rcs, quicklook, txt_to_npz
 
-data, dates = read_npz("./data/2021/08/12/RS/data.npz")
-rcs_d = rcs(data[:2])
+data, dates = read_npz('./data/2021/08/12/RS/data.npz')
+data_rcs = rcs(data)
 
-plot_profile(rcs_d[0], max_height=1_500)
-plot_profile(rcs_d[1], max_height=1_500)
+quicklook(data[:-40, :], bin_res=3.75, max_height=1_500, bin_zero=0)

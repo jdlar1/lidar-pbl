@@ -18,6 +18,7 @@ def read_txts(
         tuple[np.ndarray, list[Any]]: 2D values for time and space dependence and a list of dates.
     """
     txts = glob.glob(dirpath + "/*.txt")
+    txts.sort()
     res = [
         re.match(r"^.+RS/RS(\d{2})(\d)(\d{2})(\d{2})\.(\d{2})(\d{2})\d+\.txt$", txt)
         for txt in txts
@@ -66,6 +67,7 @@ def txt_to_npz(
         _type_: None
     """
     txts = glob.glob(dirpath + "/*.txt")
+    txts.sort()
     res = [
         re.match(r"^.+RS/RS(\d{2})(\d)(\d{2})(\d{2})\.(\d{2})(\d{2})\d+\.txt$", txt)
         for txt in txts
