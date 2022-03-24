@@ -9,7 +9,6 @@ def rcs(
         bins (np.ndarray): The raw lidar scan.
         bin_res (float, optional): The resolution of the lidar scan. Defaults to 3.75.
     """
-    print(bins.shape)
 
     bin_number = np.arange(0, bins.shape[1])
     heights = bin_number * bin_res

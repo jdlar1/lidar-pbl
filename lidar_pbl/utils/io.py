@@ -23,14 +23,12 @@ def read_txts(
         re.match(r"^.+RS/RS(\d{2})(\d)(\d{2})(\d{2})\.(\d{2})(\d{2})\d+\.txt$", txt)
         for txt in txts
     ]
-    # print(res)
     dates = [
         pendulum.parse(
             f"20{res.group(1)}-0{res.group(2)}-{res.group(3)}T{res.group(4)}:{res.group(5)}:{res.group(6)}"
         )
         for res in res
     ]
-    # print(type(dates[0]))
     data = [np.loadtxt(txt, skiprows=5) for txt in txts]
     return data, dates
 
@@ -72,14 +70,12 @@ def txt_to_npz(
         re.match(r"^.+RS/RS(\d{2})(\d)(\d{2})(\d{2})\.(\d{2})(\d{2})\d+\.txt$", txt)
         for txt in txts
     ]
-    # print(res)
     dates = [
         pendulum.parse(
             f"20{res.group(1)}-0{res.group(2)}-{res.group(3)}T{res.group(4)}:{res.group(5)}:{res.group(6)}"
         )
         for res in res
     ]
-    # print(type(dates[0]))
     data = [np.loadtxt(txt, skiprows=5) for txt in txts]
     filepath_output = (
         filepath_output

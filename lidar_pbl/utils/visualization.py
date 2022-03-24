@@ -47,16 +47,15 @@ def quicklook(
         "aspect": "auto",
         "interpolation": "bilinear",
         "cmap": "jet",
-        "norm": colors.LogNorm()
-        # "norm": colors.LogNorm(vmin=bin2d.min() + 4.8, vmax=(bin2d.max() -bin2d.max()*0.3), clip=True),
+        # "norm": colors.LogNorm()
+        "norm": colors.LogNorm(clip=True),
     }
-    print(bin2d.min())
 
     heights = np.arange(0, bin2d.shape[0]) * bin_res
     bin_number = np.arange(0, bin2d.shape[1])
 
     heights = bin_number * bin_res
-    plt.figure(figsize=(14, 9))
+    plt.figure(figsize=(12, 7))
 
     if max_height is None:
         plt.imshow(bin2d.T[:, bin_zero:], **params)
@@ -66,7 +65,7 @@ def quicklook(
         index = np.searchsorted(heights, max_height)
         plt.imshow(bin2d[:, bin_zero:index].T, **params)
         plt.gca().yaxis.set_major_formatter(
-            plt.FuncFormatter(lambda x, pos: heights[int(x)])
+            plt.FuncFormatter(lambda x, _: heights[int(x)])
         )
         # plt.yticks(heights[bin_zero:index])
 

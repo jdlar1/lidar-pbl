@@ -507,14 +507,6 @@ optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
-name = "pycairo"
-version = "1.21.0"
-description = "Python interface for cairo"
-category = "dev"
-optional = false
-python-versions = ">=3.7"
-
-[[package]]
 name = "pycparser"
 version = "2.21"
 description = "C parser in Python"
@@ -529,17 +521,6 @@ description = "Pygments is a syntax highlighting package written in Python."
 category = "main"
 optional = false
 python-versions = ">=3.5"
-
-[[package]]
-name = "pygobject"
-version = "3.42.0"
-description = "Python bindings for GObject Introspection"
-category = "dev"
-optional = false
-python-versions = ">=3.6, <4"
-
-[package.dependencies]
-pycairo = ">=1.16,<2.0"
 
 [[package]]
 name = "pyparsing"
@@ -731,7 +712,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.10"
-content-hash = "ae9d4fdae9a1750753901e343dcc5a4d855c7ad745b9f2bf823969833cf74982"
+content-hash = "c3c0d4910abdaa09ee9e0908881fdaa6cb060f52b80d68ae9dcfe45f185d7cec"
 
 [metadata.files]
 appnope = [
@@ -1187,17 +1168,6 @@ py = [
     {file = "py-1.11.0-py2.py3-none-any.whl", hash = "sha256:607c53218732647dff4acdfcd50cb62615cedf612e72d1724fb1a0cc6405b378"},
     {file = "py-1.11.0.tar.gz", hash = "sha256:51c75c4126074b472f746a24399ad32f6053d1b34b68d2fa41e558e6f4a98719"},
 ]
-pycairo = [
-    {file = "pycairo-1.21.0-cp310-cp310-win32.whl", hash = "sha256:44a2ecf34968de07b3b9dfdcdbccbd25aa3cab267200f234f84e81481a73bbf6"},
-    {file = "pycairo-1.21.0-cp310-cp310-win_amd64.whl", hash = "sha256:f63c153a9ea3d21aff85e2caeee4b0c5d566b2368b4ed64826020d12953d76a4"},
-    {file = "pycairo-1.21.0-cp37-cp37m-win32.whl", hash = "sha256:70936b19f967fa3cb3cd200c2608911227fa5d09dae21c166f64bc15e714ee41"},
-    {file = "pycairo-1.21.0-cp37-cp37m-win_amd64.whl", hash = "sha256:31e1c4850db03201d33929cbe1905ce1b33202683ebda7bb0d4dba489115066b"},
-    {file = "pycairo-1.21.0-cp38-cp38-win32.whl", hash = "sha256:dace6b356c476de27f8e1522428ac21a799c225703f746e2957d441f885dcb6c"},
-    {file = "pycairo-1.21.0-cp38-cp38-win_amd64.whl", hash = "sha256:4357f20a6b1de8f1e8072a74ff68ab4c9a0ae698cd9f5c0f2b2cdd9b28b635f6"},
-    {file = "pycairo-1.21.0-cp39-cp39-win32.whl", hash = "sha256:6d37375aab9f2bb6136f076c19815d72108383baae89fbc0d6cb8e5092217d02"},
-    {file = "pycairo-1.21.0-cp39-cp39-win_amd64.whl", hash = "sha256:26b72b813c6f9d495f71057eab89c13e70a21c92360e9265abc049e0a931fa39"},
-    {file = "pycairo-1.21.0.tar.gz", hash = "sha256:251907f18a552df938aa3386657ff4b5a4937dde70e11aa042bc297957f4b74b"},
-]
 pycparser = [
     {file = "pycparser-2.21-py2.py3-none-any.whl", hash = "sha256:8ee45429555515e1f6b185e78100aea234072576aa43ab53aefcae078162fca9"},
     {file = "pycparser-2.21.tar.gz", hash = "sha256:e644fdec12f7872f86c58ff790da456218b10f863970249516d60a5eaca77206"},
@@ -1205,9 +1175,6 @@ pycparser = [
 pygments = [
     {file = "Pygments-2.11.2-py3-none-any.whl", hash = "sha256:44238f1b60a76d78fc8ca0528ee429702aae011c265fe6a8dd8b63049ae41c65"},
     {file = "Pygments-2.11.2.tar.gz", hash = "sha256:4e426f72023d88d03b2fa258de560726ce890ff3b630f88c21cbb8b2503b8c6a"},
-]
-pygobject = [
-    {file = "PyGObject-3.42.0.tar.gz", hash = "sha256:b9803991ec0b0b4175e81fee0ad46090fa7af438fe169348a9b18ae53447afcd"},
 ]
 pyparsing = [
     {file = "pyparsing-3.0.7-py3-none-any.whl", hash = "sha256:a6c06a88f252e6c322f65faf8f418b16213b51bdfaece0524c1c1bc30c63c484"},
