@@ -37,36 +37,37 @@ def quicklook(
     bin_zero: int = 0,
 ):
     """
-    Plots a 2D lidar scan.
+    Quicklook of the data.
     Args:
-        bin2d (np.ndarray): The 2D lidar scan.
+        bin2d (np.ndarray): The raw lidar scan.
         bin_res (float, optional): The resolution of the lidar scan. Defaults to 3.75.
+        max_height (int | float, optional): The maximum height to plot. Defaults to None.
+        bin_zero (int, optional): The number of bins to be removed from the top. Defaults to 0.
     """
-    params = {
-        "origin": "lower",
-        "aspect": "auto",
-        "interpolation": "bilinear",
-        "cmap": "jet",
-        # "norm": colors.LogNorm()
-        "norm": colors.LogNorm(clip=True),
-    }
 
-    heights = np.arange(0, bin2d.shape[0]) * bin_res
-    bin_number = np.arange(0, bin2d.shape[1])
-
+    bin_number = np.arange(0, bin2d.shape[0])
     heights = bin_number * bin_res
-    plt.figure(figsize=(12, 7))
 
     if max_height is None:
-        plt.imshow(bin2d.T[:, bin_zero:], **params)
-        plt.gca().yaxis.set_major_formatter(lambda x, _: heights[x])
-        # plt.yticks(heights[bin_zero:])
+        data, h = bin2d[:, bin_zero:].T, heights[bin_zero:],
     else:
         index = np.searchsorted(heights, max_height)
-        plt.imshow(bin2d[:, bin_zero:index].T, **params)
-        plt.gca().yaxis.set_major_formatter(
-            plt.FuncFormatter(lambda x, _: heights[int(x)])
-        )
-        # plt.yticks(heights[bin_zero:index])
+        data, h= bin2d[:, bin_zero: index].T, heights[bin_zero:index]
+
+    print(f'min: {np.min(data)}, max: {np.max(data)}')
+    params = {
+        "aspect": "auto",
+        "cmap": "jet",
+        "interpolation": "bilinear",
+        "origin": "lower",
+        "norm": colors.Normalize(vmax=data.max() * 0.008)
+    }
+
+    plt.figure(figsize=(10, 4))
+    plt.imshow(data, **params)
+
+    plt.xlabel("Lidar Signal [a.u.]")
+    plt.ylabel("Height [m]")
+    plt.colorbar()
 
     plt.show()

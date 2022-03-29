@@ -12,10 +12,7 @@ def main():
         data_type="NPZ",
     )
 
-    lidar_dataset.quicklook(
-        max_height=1500,
-    )
-
+    lidar_dataset.quicklook(max_height=6000)
     # print(lidar_dataset.rcs)
 
 

@@ -56,7 +56,6 @@ class LidarDataset:
                 raise ValueError(f"Invalid data_type: {data_type}")
 
         self.data = self.data - self.dark_current
-        self.rcs = rcs(self.data)
 
     @property
     def data(self):
@@ -66,6 +65,10 @@ class LidarDataset:
     def data(self, data):
         self.rcs = rcs(data)
         self._data = data
+
+    def rcs_diff(self, bins: int = 0, degree: int = 1):
+        """Calculate the RCS difference between two lidar scans."""
+        return np.diff(self.rcs[bins])
 
     def plot_profile(
         self,
