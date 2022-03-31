@@ -45,7 +45,7 @@ def quicklook(
         bin_zero (int, optional): The number of bins to be removed from the top. Defaults to 0.
     """
 
-    bin_number = np.arange(0, bin2d.shape[0])
+    bin_number = np.arange(0, bin2d.shape[1])
     heights = bin_number * bin_res
 
     if max_height is None:
@@ -60,7 +60,7 @@ def quicklook(
         "cmap": "jet",
         "interpolation": "bilinear",
         "origin": "lower",
-        "norm": colors.Normalize(vmax=data.max() * 0.008)
+        "norm": colors.LogNorm(vmax=data.max() * 0.008, clip=True)
     }
 
     plt.figure(figsize=(10, 4))

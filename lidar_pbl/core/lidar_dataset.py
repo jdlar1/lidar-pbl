@@ -32,7 +32,7 @@ class LidarDataset:
             data_path (pathlib.Path | str): The path of the directory if data_type is NPZ, or the path of the txt file if data_type is TXT.
             data_type (InputType, optional): The type of the data. Defaults to InputType.NPZ.
         """
-        self._data = None
+        self._data: np.ndarray | None = None
 
         if isinstance(dark_current, np.ndarray):
             if dark_current.shape != self.data[0].shape:
@@ -54,11 +54,11 @@ class LidarDataset:
                 self.data, self.dates = read_npz(data_path)
             case _:
                 raise ValueError(f"Invalid data_type: {data_type}")
-
+        
         self.data = self.data - self.dark_current
 
     @property
-    def data(self):
+    def data(self) -> np.ndarray:
         return self._data
 
     @data.setter
