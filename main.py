@@ -1,10 +1,7 @@
-from lidar_pbl import LidarDataset
-from lidar_pbl.utils.visualization import quicklook
-
-import numpy as np
-
 import matplotlib.pyplot as plt
-from matplotlib.colors import LogNorm
+
+from lidar_pbl import LidarDataset
+from lidar_pbl.core.methods import gradient
 
 
 def main():
@@ -13,12 +10,14 @@ def main():
         dark_current="./data/dark_current/dark_current.npy",
         data_type="NPZ",
     )
-    print('max:', lidar_dataset.data.max())
-    print('min:', lidar_dataset.data.min())
-    print('min_rcs:', lidar_dataset.rcs.min())
 
-    lidar_dataset.quicklook(max_height=2000)
-    # print(lidar_dataset.rcs)
+    # lidar_dataset.quicklook(max_height=2000)
+    # plt.plot(lidar_dataset.rcs[0][:600], label = "rcs")
+    plt.plot(gradient(lidar_dataset.rcs[0][:600]), label = "gradient")
+
+    plt.legend()
+    plt.show()
+
 
 
 if __name__ == "__main__":

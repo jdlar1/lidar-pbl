@@ -1,3 +1,4 @@
+from cProfile import label
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -62,9 +63,6 @@ def quicklook(
         index = np.searchsorted(heights, max_height)
         data, h = bin2d[:, bin_zero:index].T, heights[bin_zero:index]
 
-    print(h.shape)
-
-    print(f"min: {np.min(data)}, max: {np.max(data)}")
     params = {
         "aspect": "auto",
         "cmap": "jet",
@@ -94,5 +92,7 @@ def quicklook(
     ax.yaxis.set_major_formatter(format_heights)
     ax.xaxis.set_major_formatter(format_dates)
     fig.autofmt_xdate(rotation=45)
+
+    fig.colorbar(ax.images[0], ax=ax, label="Lidar Signal [a.u.]")
 
     plt.show()
