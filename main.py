@@ -1,9 +1,9 @@
-import matplotlib.pyplot as plt
 from lidar_pbl import LidarDataset
 from lidar_pbl.utils.visualization import quicklook
 
 import numpy as np
 
+import matplotlib.pyplot as plt
 from matplotlib.colors import LogNorm
 
 
@@ -17,10 +17,7 @@ def main():
     print('min:', lidar_dataset.data.min())
     print('min_rcs:', lidar_dataset.rcs.min())
 
-    print('argmin: ', np.argmin(lidar_dataset.data, axis = 1))
-        
-
-    lidar_dataset.quicklook(max_height=1500)
+    lidar_dataset.quicklook(max_height=2000)
     # print(lidar_dataset.rcs)
 
 

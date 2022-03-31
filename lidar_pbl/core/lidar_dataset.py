@@ -1,8 +1,6 @@
-import glob
 import pathlib
 
 import numpy as np
-from pandas import array
 
 from lidar_pbl.core.types import InputType
 from lidar_pbl.utils import (
@@ -25,6 +23,7 @@ class LidarDataset:
         data_path: pathlib.Path | str,
         dark_current: pathlib.Path | np.ndarray,
         data_type: InputType = InputType.NPZ,
+        bin_res: float = 3.75,
     ):
         """Initialize LidarDataset for data processing
 
@@ -33,6 +32,7 @@ class LidarDataset:
             data_type (InputType, optional): The type of the data. Defaults to InputType.NPZ.
         """
         self._data: np.ndarray | None = None
+        self.bin_res: float = bin_res
 
         if isinstance(dark_current, np.ndarray):
             if dark_current.shape != self.data[0].shape:
@@ -49,13 +49,15 @@ class LidarDataset:
 
         match data_type:
             case InputType.TXT:
-                self.data, self.dates = read_txts(data_path)
+                temp_data, self.dates = read_txts(data_path)
             case InputType.NPZ:
-                self.data, self.dates = read_npz(data_path)
+                temp_data, self.dates = read_npz(data_path)
             case _:
                 raise ValueError(f"Invalid data_type: {data_type}")
-        
-        self.data = self.data - self.dark_current
+
+        temp_data = temp_data - self.dark_current
+        temp_data[temp_data < 0] = 0
+        self.data = temp_data
 
     @property
     def data(self) -> np.ndarray:
@@ -81,7 +83,6 @@ class LidarDataset:
             bin_number (int, optional): The number of bins. Defaults to 0.
             max_height (int | float, optional): The maximum height to plot. Defaults to None.
         """
-        print(self.data[bin_number].shape)
         plot_profile(self.rcs[bin_number], max_height=max_height)
 
     def quicklook(self, max_height: float = None):
@@ -91,4 +92,4 @@ class LidarDataset:
             bin_number (int, optional): The number of bins. Defaults to 0.
             max_height (int | float, optional): The maximum height to plot. Defaults to None.
         """
-        quicklook(self.rcs, max_height=max_height)
+        quicklook(self.rcs, self.dates, max_height=max_height, bin_res=self.bin_res)

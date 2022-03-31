@@ -2,7 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from matplotlib import colors
-import matplotlib as mpl
+from matplotlib.ticker import FuncFormatter
+import pendulum
 
 
 def plot_profile(
@@ -32,6 +33,7 @@ def plot_profile(
 
 def quicklook(
     bin2d: np.ndarray,
+    dates: list[pendulum.DateTime],
     bin_res: float = 3.75,
     max_height: None | float = None,
     bin_zero: int = 0,
@@ -45,29 +47,52 @@ def quicklook(
         bin_zero (int, optional): The number of bins to be removed from the top. Defaults to 0.
     """
 
+    if len(dates) != bin2d.shape[0]:
+        raise ValueError("The length of dates does not match the number of rows.")
+
     bin_number = np.arange(0, bin2d.shape[1])
     heights = bin_number * bin_res
 
     if max_height is None:
-        data, h = bin2d[:, bin_zero:].T, heights[bin_zero:],
+        data, h = (
+            bin2d[:, bin_zero:].T,
+            heights[bin_zero:],
+        )
     else:
         index = np.searchsorted(heights, max_height)
-        data, h= bin2d[:, bin_zero: index].T, heights[bin_zero:index]
+        data, h = bin2d[:, bin_zero:index].T, heights[bin_zero:index]
 
-    print(f'min: {np.min(data)}, max: {np.max(data)}')
+    print(h.shape)
+
+    print(f"min: {np.min(data)}, max: {np.max(data)}")
     params = {
         "aspect": "auto",
         "cmap": "jet",
-        "interpolation": "bilinear",
+        "interpolation": "antialiased",
         "origin": "lower",
-        "norm": colors.LogNorm(vmax=data.max() * 0.008, clip=True)
+        "norm": colors.LogNorm(vmax=data.max() * 0.1, clip=True),
     }
 
-    plt.figure(figsize=(10, 4))
-    plt.imshow(data, **params)
+    fig, ax = plt.subplots(figsize=(12, 5))
 
-    plt.xlabel("Lidar Signal [a.u.]")
-    plt.ylabel("Height [m]")
-    plt.colorbar()
+    ax.imshow(data, **params)
+
+    ax.set(xlabel="Time", ylabel="Height [m]", title="Lidar Scan")
+
+    @FuncFormatter
+    def format_heights(x, pos = None):
+        if x >= h.shape[0]:
+            return ""
+        return f"{h[int(x)]}"
+
+    @FuncFormatter
+    def format_dates(x, pos = None):
+        if x >= dates.shape[0]:
+            return ""
+        return dates[int(x)].format("HH:mm:ss")
+
+    ax.yaxis.set_major_formatter(format_heights)
+    ax.xaxis.set_major_formatter(format_dates)
+    fig.autofmt_xdate(rotation=45)
 
     plt.show()

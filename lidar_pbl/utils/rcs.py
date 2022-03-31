@@ -13,9 +13,5 @@ def rcs(
     bin_number = np.arange(0, bins.shape[1])
     heights = bin_number * bin_res
     heights = np.tile(heights, (bins.shape[0], 1))
-    index = np.searchsorted(heights[0], background_height)
 
-    background_value = np.mean(bins[:, :index])
-    bins_cleaned = bins - background_value
-
-    return bins_cleaned * heights * heights
+    return bins * heights * heights
