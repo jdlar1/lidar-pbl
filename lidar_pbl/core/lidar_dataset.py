@@ -3,7 +3,7 @@ import pathlib
 import numpy as np
 
 from lidar_pbl.core.types import InputType
-from lidar_pbl.core.methods import gradient
+from lidar_pbl.core.methods import gradient_pbl
 from lidar_pbl.utils import (
     read_npz,
     plot_profile,
@@ -90,10 +90,10 @@ class LidarDataset:
         """
         quicklook(self.rcs, self.dates, max_height=max_height, bin_res=self.bin_res)
 
-    def gradient(self, bins: int = 0):
+    def gradient_pbl(self, max_grad=None, max_height=3000):
         """Calculate the gradient of the data.
 
         Args:
             bins (int, optional): The number of bins. Defaults to 0.
         """
-        return gradient(self.rcs[bins])
+        return gradient_pbl(self.rcs)

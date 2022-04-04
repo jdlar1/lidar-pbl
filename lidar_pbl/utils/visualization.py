@@ -28,8 +28,6 @@ def plot_profile(
     plt.xlabel("Lidar Signal [a.u.]")
     plt.ylabel("Height [m]")
 
-    plt.show()
-
 
 def quicklook(
     bin2d: np.ndarray,
@@ -93,5 +91,3 @@ def quicklook(
     fig.autofmt_xdate(rotation=45)
 
     fig.colorbar(ax.images[0], ax=ax, label="Lidar Signal [a.u.]")
-
-    plt.show()
