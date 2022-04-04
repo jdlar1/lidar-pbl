@@ -1,4 +1,3 @@
-from cProfile import label
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -78,13 +77,13 @@ def quicklook(
     ax.set(xlabel="Time", ylabel="Height [m]", title="Lidar Scan")
 
     @FuncFormatter
-    def format_heights(x, pos = None):
+    def format_heights(x, pos=None):
         if x >= h.shape[0]:
             return ""
         return f"{h[int(x)]}"
 
     @FuncFormatter
-    def format_dates(x, pos = None):
+    def format_dates(x, pos=None):
         if x >= dates.shape[0]:
             return ""
         return dates[int(x)].format("HH:mm:ss")

@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def gradient(lidar_profile: np.ndarray) -> np.ndarray:
     """Calculates the gradient of the lidar profile.
     Args:

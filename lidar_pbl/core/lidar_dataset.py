@@ -3,12 +3,12 @@ import pathlib
 import numpy as np
 
 from lidar_pbl.core.types import InputType
+from lidar_pbl.core.methods import gradient
 from lidar_pbl.utils import (
     read_npz,
     plot_profile,
     rcs,
     quicklook,
-    txt_to_npz,
     read_txts,
 )
 
@@ -68,10 +68,6 @@ class LidarDataset:
         self.rcs = rcs(data)
         self._data = data
 
-    def rcs_diff(self, bins: int = 0, degree: int = 1):
-        """Calculate the RCS difference between two lidar scans."""
-        return np.diff(self.rcs[bins])
-
     def plot_profile(
         self,
         bin_number: int = 0,
@@ -93,3 +89,11 @@ class LidarDataset:
             max_height (int | float, optional): The maximum height to plot. Defaults to None.
         """
         quicklook(self.rcs, self.dates, max_height=max_height, bin_res=self.bin_res)
+
+    def gradient(self, bins: int = 0):
+        """Calculate the gradient of the data.
+
+        Args:
+            bins (int, optional): The number of bins. Defaults to 0.
+        """
+        return gradient(self.rcs[bins])
