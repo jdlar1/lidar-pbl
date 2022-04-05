@@ -92,7 +92,7 @@ class LidarDataset:
         """
         quicklook(self.rcs, self.dates, max_height=max_height, bin_res=self.bin_res)
 
-    def gradient_pbl(self, min_grad=-0.08, max_height=3000):
+    def gradient_pbl(self, min_grad=-0.08, max_height=3000, min_height=0):
         """Gradient PBL height criterias
 
         Args:
@@ -100,15 +100,17 @@ class LidarDataset:
             max_height (int, optional): _description_. Defaults to 3000.
         """
         height_index = np.searchsorted(self.heights, max_height)
-        points = gradient_pbl(self.rcs[:, :height_index], min_grad=min_grad)
+        min_height_index = np.searchsorted(self.heights, min_height)
+        points = gradient_pbl(self.rcs[:, min_height_index:height_index], min_grad=min_grad)
 
         plt.scatter(
             np.arange(points.size), points, marker="^", label=f"Gradient method", alpha=0.5, s=15
         )
 
-    def variance_pbl(self, max_height=3000):
+    def variance_pbl(self, max_height=3000, min_height=0, window_size=10):
         height_index = np.searchsorted(self.heights, max_height)
-        element, variance = variance_pbl(self.rcs[:, :height_index])
+        min_height_index = np.searchsorted(self.heights, min_height)
+        element, variance = variance_pbl(self.rcs[:, min_height_index:height_index], window_size=window_size)
 
         plt.scatter(
             element, variance, marker="o", label=f"Variance method", alpha=0.5, s=15, c="g"
