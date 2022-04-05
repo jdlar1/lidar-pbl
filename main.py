@@ -14,9 +14,10 @@ def main():
 
     lidar_dataset.quicklook(max_height=2000)
     lidar_dataset.gradient_pbl(max_height=1500, min_grad=-0.05)
-    # LL, (LH, HL, HH) = wavelet_pbl(lidar_dataset.rcs[:, :800])
-    # plt.imshow(LH.T, aspect="auto", cmap="gray", origin="lower")
-    # plt.show()
+    lidar_dataset.variance_pbl(max_height=1500)
+    # # LL, (LH, HL, HH) = wavelet_pbl(lidar_dataset.rcs[:, :800])
+    # # plt.imshow(LH.T, aspect="auto", cmap="gray", origin="lower")
+    # # plt.show()
 
     lidar_dataset.show()
 

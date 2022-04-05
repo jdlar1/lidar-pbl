@@ -1,12 +1,13 @@
 from cProfile import label
 import pathlib
 from re import search
+from statistics import variance
 
 import numpy as np
 from matplotlib import pyplot as plt
 
 from lidar_pbl.core.types import InputType
-from lidar_pbl.core.methods import gradient_pbl, wavelet_pbl
+from lidar_pbl.core.methods import gradient_pbl, variance_pbl, wavelet_pbl
 from lidar_pbl.utils import (
     read_npz,
     plot_profile,
@@ -105,8 +106,17 @@ class LidarDataset:
         points = gradient_pbl(self.rcs[:, :height_index], min_grad=min_grad)
 
         plt.scatter(
-            np.arange(points.size), points, marker="^", label=f"Gradient method"
+            np.arange(points.size), points, marker="^", label=f"Gradient method", alpha=0.5, s=15
         )
+
+    def variance_pbl(self, max_height=3000):
+        height_index = np.searchsorted(self.heights, max_height)
+        element, variance = variance_pbl(self.rcs[:, :height_index])
+
+        plt.scatter(
+            element, variance, marker="o", label=f"Variance method", alpha=0.5, s=15, c="g"
+        )
+
 
     def show(self, legend=True) -> None:
         """Show the data.
@@ -121,4 +131,3 @@ class LidarDataset:
     def wavelet_pbl(self, max_height=3000):
         height_index = np.searchsorted(self.heights, max_height)
         wavelet_pbl(self.rcs[:, :height_index])
-        

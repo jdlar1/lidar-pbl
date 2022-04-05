@@ -1,3 +1,6 @@
+from tempfile import tempdir
+import time
+
 import pywt
 import numpy as np
 from matplotlib import pyplot as plt
@@ -69,3 +72,31 @@ def wavelet_pbl(
 ) -> np.ndarray:
     wavelet = pywt.dwt2(lidar_profile, "bior1.3", axes=(0, 1))
     return wavelet
+
+
+def variance_pbl(
+    lidar_profile: np.ndarray,
+    window_size: int = 10,
+) -> np.ndarray:
+    
+    window_number = lidar_profile.shape[0] // window_size
+    window_element = np.arange(window_number) * window_size
+
+    variance = np.zeros([window_number, lidar_profile.shape[1]])
+
+    for i, window in enumerate(window_element):
+        start = window
+        end = start + window_size
+
+        temp_var = np.var(lidar_profile[start:end, :], axis=0)
+
+        variance[i, :] = temp_var
+
+        # var_window = np.var(lidar_profile[start:end], axis=0)
+        # variance = np.hstack([variance, var_window])
+    
+    variance_vote = np.argmax(variance, axis=1)
+    print(variance_vote.shape)
+    
+    return window_element, variance_vote
+    
