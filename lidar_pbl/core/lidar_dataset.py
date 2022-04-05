@@ -1,7 +1,4 @@
-from cProfile import label
 import pathlib
-from re import search
-from statistics import variance
 
 import numpy as np
 from matplotlib import pyplot as plt
