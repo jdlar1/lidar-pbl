@@ -1,11 +1,12 @@
 from cProfile import label
 import pathlib
+from re import search
 
 import numpy as np
 from matplotlib import pyplot as plt
 
 from lidar_pbl.core.types import InputType
-from lidar_pbl.core.methods import gradient_pbl
+from lidar_pbl.core.methods import gradient_pbl, wavelet_pbl
 from lidar_pbl.utils import (
     read_npz,
     plot_profile,
@@ -33,7 +34,7 @@ class LidarDataset:
             data_path (pathlib.Path | str): The path of the directory if data_type is NPZ, or the path of the txt file if data_type is TXT.
             data_type (InputType, optional): The type of the data. Defaults to InputType.NPZ.
         """
-        self._data: np.ndarray | None = None
+        self._data: np.ndarray = np.empty(0)
         self.bin_res: float = bin_res
 
         if isinstance(dark_current, np.ndarray):
@@ -57,7 +58,7 @@ class LidarDataset:
             case _:
                 raise ValueError(f"Invalid data_type: {data_type}")
 
-        temp_data = temp_data - self.dark_current
+        temp_data: np.ndarray = temp_data - self.dark_current
         temp_data[temp_data < 0] = 0
         self.data = temp_data
         self.heights = np.arange(temp_data.shape[1]) * self.bin_res
@@ -117,5 +118,7 @@ class LidarDataset:
             plt.legend()
         plt.show()
 
-    def wavelet_pbl(self):
-        ...
+    def wavelet_pbl(self, max_height=3000):
+        height_index = np.searchsorted(self.heights, max_height)
+        wavelet_pbl(self.rcs[:, :height_index])
+        

@@ -2,8 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from lidar_pbl import LidarDataset
-from lidar_pbl.core.methods import gradient_pbl
-from lidar_pbl.utils.misc import moving_average
+from lidar_pbl.core.methods import wavelet_pbl
 
 
 def main():
@@ -15,7 +14,9 @@ def main():
 
     lidar_dataset.quicklook(max_height=2000)
     lidar_dataset.gradient_pbl(max_height=1500, min_grad=-0.05)
-    # lidar_dataset
+    # LL, (LH, HL, HH) = wavelet_pbl(lidar_dataset.rcs[:, :800])
+    # plt.imshow(LH.T, aspect="auto", cmap="gray", origin="lower")
+    # plt.show()
 
     lidar_dataset.show()
 

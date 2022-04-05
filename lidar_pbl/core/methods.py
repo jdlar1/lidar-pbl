@@ -1,7 +1,6 @@
-import warnings
-
-from matplotlib import pyplot as plt
+import pywt
 import numpy as np
+from matplotlib import pyplot as plt
 
 
 def gradient_pbl(
@@ -32,12 +31,22 @@ def gradient_pbl(
     else:
         gradient = np.gradient(np.log10(safe_profile))[1]
 
-    gradient[gradient > 0] = 0
+    gradient2 = np.gradient(gradient)[1]
+
+
+    # num = 0
+    # final = 300
+    # plt.plot(gradient[num][10:final])
+    # plt.plot(np.gradient(gradient[num][10:final]))
+    # plt.show()
 
     if max_grad is not None:
         gradient[gradient < min_grad] = 0
+    gradient[gradient > 0] = 0
+    # gradient2[gradient2 > 0] = 0
 
-    # plt.plot(gradient[0])
+    # plt.plot(gradient[num][10:final])
+    # plt.plot(gradient2[num][10:final])
     # plt.show()
 
     heights = np.arange(0, lidar_profile.shape[0]) * bin_res
@@ -53,3 +62,10 @@ def gradient_pbl(
     mins = np.argmin(gradient, axis=min_axis)
 
     return mins
+
+
+def wavelet_pbl(
+    lidar_profile: np.ndarray,
+) -> np.ndarray:
+    wavelet = pywt.dwt2(lidar_profile, "bior1.3", axes=(0, 1))
+    return wavelet
