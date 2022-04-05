@@ -1,6 +1,8 @@
+from cProfile import label
 import pathlib
 
 import numpy as np
+from matplotlib import pyplot as plt
 
 from lidar_pbl.core.types import InputType
 from lidar_pbl.core.methods import gradient_pbl
@@ -58,6 +60,7 @@ class LidarDataset:
         temp_data = temp_data - self.dark_current
         temp_data[temp_data < 0] = 0
         self.data = temp_data
+        self.heights = np.arange(temp_data.shape[1]) * self.bin_res
 
     @property
     def data(self) -> np.ndarray:
@@ -90,10 +93,29 @@ class LidarDataset:
         """
         quicklook(self.rcs, self.dates, max_height=max_height, bin_res=self.bin_res)
 
-    def gradient_pbl(self, max_grad=None, max_height=3000):
-        """Calculate the gradient of the data.
+    def gradient_pbl(self, min_grad=-0.08, max_height=3000):
+        """Gradient PBL height criterias
+
+        Args:
+            min_grad (float, optional): _description_. Defaults to 0.08.
+            max_height (int, optional): _description_. Defaults to 3000.
+        """
+        height_index = np.searchsorted(self.heights, max_height)
+        points = gradient_pbl(self.rcs[:, :height_index], min_grad=min_grad)
+
+        plt.scatter(
+            np.arange(points.size), points, marker="^", label=f"Gradient method"
+        )
+
+    def show(self, legend=True) -> None:
+        """Show the data.
 
         Args:
             bins (int, optional): The number of bins. Defaults to 0.
         """
-        return gradient_pbl(self.rcs)
+        if legend:
+            plt.legend()
+        plt.show()
+
+    def wavelet_pbl(self):
+        ...

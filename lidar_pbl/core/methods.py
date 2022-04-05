@@ -23,7 +23,6 @@ def gradient_pbl(
         np.ndarray: 1D array of pbl heights
     """
 
-
     safe_profile = lidar_profile.copy()
     safe_profile[safe_profile <= 0] = 1e-10
     dimension = safe_profile.ndim
@@ -42,15 +41,15 @@ def gradient_pbl(
     # plt.show()
 
     heights = np.arange(0, lidar_profile.shape[0]) * bin_res
-    index_top = np.searchsorted(heights, max_height, side='right') - 1
-    index_bottom = np.searchsorted(heights, min_height, side='right') - 1
+    index_top = np.searchsorted(heights, max_height, side="right") - 1
+    index_bottom = np.searchsorted(heights, min_height, side="right") - 1
     print("index_top", index_top)
     print("index_bottom", index_bottom)
 
     if max_grad is not None:
         gradient[gradient > max_grad] = 0
-    
-    min_axis = 0 if dimension == 1  else 1
+
+    min_axis = 0 if dimension == 1 else 1
     mins = np.argmin(gradient, axis=min_axis)
 
     return mins

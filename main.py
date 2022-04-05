@@ -13,17 +13,11 @@ def main():
         data_type="NPZ",
     )
 
-    # print(lidar_dataset.rcs[:1, :300].shape)
-
-    # lidar_dataset.
-    # plt.plot(lidar_dataset.rcs[0][:600], label = "rcs")
-    gradient_heights = gradient_pbl(lidar_dataset.rcs[:, :350], min_grad=-0.08)
     lidar_dataset.quicklook(max_height=2000)
-    print(gradient_heights.shape)
-    plt.scatter(np.arange(gradient_heights.shape[0]), gradient_heights, label="gradient")
-    # print(lidar_dataset.rcs[:2,:600].shape)
+    lidar_dataset.gradient_pbl(max_height=1500, min_grad=-0.05)
+    # lidar_dataset
 
-    plt.show()
+    lidar_dataset.show()
 
 
 if __name__ == "__main__":
