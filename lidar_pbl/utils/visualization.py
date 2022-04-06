@@ -63,9 +63,9 @@ def quicklook(
     params = {
         "aspect": "auto",
         "cmap": "jet",
-        "interpolation": "antialiased",
+        "interpolation": "bilinear",
         "origin": "lower",
-        "norm": colors.LogNorm(vmax=data.max() * 0.1, clip=True),
+        "norm": colors.LogNorm(vmax=data.max() * 0.004, clip=True),
     }
 
     fig, ax = plt.subplots(figsize=(12, 5))
