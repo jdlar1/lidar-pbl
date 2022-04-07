@@ -63,7 +63,7 @@ def quicklook(
     params = {
         "aspect": "auto",
         "cmap": "jet",
-        "interpolation": "bilinear",
+        "interpolation": "antialiased",
         "origin": "lower",
         "norm": colors.LogNorm(vmax=data.max() * 0.004, clip=True),
     }

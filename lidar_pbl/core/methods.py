@@ -1,9 +1,5 @@
-from tempfile import tempdir
-import time
-
 import pywt
 import numpy as np
-from matplotlib import pyplot as plt
 
 
 def gradient_pbl(
@@ -35,7 +31,6 @@ def gradient_pbl(
         gradient = np.gradient(np.log10(safe_profile))[1]
 
     gradient2 = np.gradient(gradient)[1]
-
 
     # num = 0
     # final = 300
@@ -78,7 +73,7 @@ def variance_pbl(
     lidar_profile: np.ndarray,
     window_size: int = 10,
 ) -> np.ndarray:
-    
+
     window_number = lidar_profile.shape[0] // window_size
     window_element = np.arange(window_number) * window_size
 
@@ -94,9 +89,8 @@ def variance_pbl(
 
         # var_window = np.var(lidar_profile[start:end], axis=0)
         # variance = np.hstack([variance, var_window])
-    
+
     variance_vote = np.argmax(variance, axis=1)
     print(variance_vote.shape)
-    
+
     return window_element, variance_vote
-    
