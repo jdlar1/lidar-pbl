@@ -50,8 +50,6 @@ def gradient_pbl(
     heights = np.arange(0, lidar_profile.shape[0]) * bin_res
     index_top = np.searchsorted(heights, max_height, side="right") - 1
     index_bottom = np.searchsorted(heights, min_height, side="right") - 1
-    print("index_top", index_top)
-    print("index_bottom", index_bottom)
 
     if max_grad is not None:
         gradient[gradient > max_grad] = 0
@@ -91,6 +89,5 @@ def variance_pbl(
         # variance = np.hstack([variance, var_window])
 
     variance_vote = np.argmax(variance, axis=1)
-    print(variance_vote.shape)
 
     return window_element, variance_vote
