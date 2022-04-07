@@ -114,7 +114,7 @@ class LidarDataset:
 
         plt.scatter(
             np.arange(points.size),
-            points,
+            points - min_height_index,
             marker="^",
             label=f"Gradient method",
             alpha=0.5,
@@ -130,7 +130,7 @@ class LidarDataset:
 
         plt.scatter(
             element,
-            variance,
+            variance - min_height_index,
             marker="o",
             label=f"Variance method",
             alpha=0.5,

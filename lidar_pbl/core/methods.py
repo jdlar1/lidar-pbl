@@ -30,7 +30,7 @@ def gradient_pbl(
     else:
         gradient = np.gradient(np.log10(safe_profile))[1]
 
-    gradient2 = np.gradient(gradient)[1]
+    # gradient2 = np.gradient(gradient)[1]
 
     # num = 0
     # final = 300
@@ -60,13 +60,6 @@ def gradient_pbl(
     return mins
 
 
-def wavelet_pbl(
-    lidar_profile: np.ndarray,
-) -> np.ndarray:
-    wavelet = pywt.dwt2(lidar_profile, "bior1.3", axes=(0, 1))
-    return wavelet
-
-
 def variance_pbl(
     lidar_profile: np.ndarray,
     window_size: int = 10,
@@ -91,3 +84,16 @@ def variance_pbl(
     variance_vote = np.argmax(variance, axis=1)
 
     return window_element, variance_vote
+
+
+def haar(x: np.ndarray, a: float, b: float) -> np.ndarray:
+    return np.piecewise(
+        x, [b - a / 2 <= x and x <= b, b <= x and x <= b + a / 2], [1, -1, 0]
+    )
+
+
+def wavelet_pbl(
+    lidar_profile: np.ndarray,
+) -> np.ndarray:
+    wavelet = pywt.dwt2(lidar_profile, "bior1.3", axes=(0, 1))
+    return wavelet
