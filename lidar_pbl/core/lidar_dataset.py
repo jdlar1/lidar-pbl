@@ -25,6 +25,7 @@ class LidarDataset:
         dark_current: pathlib.Path | np.ndarray,
         data_type: InputType = InputType.NPZ,
         bin_res: float = 3.75,
+        bin_zero: int = 12,
     ):
         """Initialize LidarDataset for data processing
 
@@ -34,6 +35,7 @@ class LidarDataset:
         """
         self._data: np.ndarray = np.empty(0)
         self.bin_res: float = bin_res
+        self.bin_zero: int = bin_zero
 
         if isinstance(dark_current, np.ndarray):
             if dark_current.shape != self.data[0].shape:
@@ -95,11 +97,13 @@ class LidarDataset:
             self.rcs,
             self.dates,
             max_height=max_height,
-            bin_zero=12,
+            bin_zero=self.bin_zero,
             bin_res=self.bin_res,
         )
 
-    def gradient_pbl(self, min_grad=-0.08, max_height=3000, min_height=0):
+    def gradient_pbl(
+        self, min_height: float = 0, min_grad: float = -0.08, max_height: float = 3000
+    ):
         """Gradient PBL height criterias
 
         Args:
@@ -114,7 +118,7 @@ class LidarDataset:
 
         plt.scatter(
             np.arange(points.size),
-            points - min_height_index,
+            points - self.bin_zero + min_height_index,
             marker="^",
             label=f"Gradient method",
             alpha=0.5,
@@ -129,8 +133,8 @@ class LidarDataset:
         )
 
         plt.scatter(
-            element,
-            variance - min_height_index,
+            element + window_size // 2,
+            variance - self.bin_zero + min_height_index,
             marker="o",
             label=f"Variance method",
             alpha=0.5,
@@ -148,6 +152,20 @@ class LidarDataset:
             plt.legend()
         plt.show()
 
-    def wavelet_pbl(self, max_height=3000):
+    def wavelet_pbl(self, max_height=3000, min_height=0, a_meters: float = 20):
         height_index = np.searchsorted(self.heights, max_height)
-        wavelet_pbl(self.rcs[:, :height_index])
+        min_height_index = np.searchsorted(self.heights, min_height)
+        a = a_meters // self.bin_res
+
+        points = wavelet_pbl(self.rcs[:, min_height_index:height_index], a=a)
+
+        plt.scatter(
+            np.arange(points.size),
+            points - self.bin_zero + min_height_index,
+            marker="^",
+            label=f"Wavelet method",
+            alpha=0.5,
+            s=15,
+            c="k",
+        )
+

@@ -1,14 +1,11 @@
-import pywt
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 def gradient_pbl(
     lidar_profile: np.ndarray,
     min_grad: float = -2,
     max_grad: float = 0.5,
-    min_height: float = 0,
-    max_height=3000,
-    bin_res: float = 3.75,
 ) -> np.ndarray:
     """Gives the pblh heights given profiles
 
@@ -47,10 +44,6 @@ def gradient_pbl(
     # plt.plot(gradient2[num][10:final])
     # plt.show()
 
-    heights = np.arange(0, lidar_profile.shape[0]) * bin_res
-    index_top = np.searchsorted(heights, max_height, side="right") - 1
-    index_bottom = np.searchsorted(heights, min_height, side="right") - 1
-
     if max_grad is not None:
         gradient[gradient > max_grad] = 0
 
@@ -86,14 +79,41 @@ def variance_pbl(
     return window_element, variance_vote
 
 
-def haar(x: np.ndarray, a: float, b: float) -> np.ndarray:
+def haar(array_shape: int, a: float = 1, b: float = 1/2) -> np.ndarray:
+    x = np.arange(0, array_shape)
     return np.piecewise(
-        x, [b - a / 2 <= x and x <= b, b <= x and x <= b + a / 2], [1, -1, 0]
+        x, 
+        [
+            np.logical_and(b - a / 2 <= x, x <= b),
+            np.logical_and(b <= x, x <= b + a / 2)
+        ],
+        [1, -1, 0]
     )
 
 
 def wavelet_pbl(
     lidar_profile: np.ndarray,
+    a: int = 4,
 ) -> np.ndarray:
-    wavelet = pywt.dwt2(lidar_profile, "bior1.3", axes=(0, 1))
-    return wavelet
+
+    def single_row_wavelet(row: np.ndarray) -> np.ndarray:
+        res = np.zeros(row.shape)
+
+        for [idx], _  in np.ndenumerate(row):
+            _fn = row * haar(row.shape[0], a, (2*idx + 1) / 2)
+            _int = np.sum(_fn)
+            res[idx] += _int
+        
+        res[0:a] = np.nan
+        res[-a:] = np.nan
+
+        return res / np.sqrt(a)
+
+    wavelets = np.apply_along_axis(single_row_wavelet, 1, lidar_profile)
+    wavelet_vote = np.nanargmax(wavelets, axis=1)
+
+
+    return wavelet_vote
+
+
+
