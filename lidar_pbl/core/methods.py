@@ -85,12 +85,18 @@ def variance_pbl(
     window_number = lidar_profile.shape[0] // window_size
     window_element = np.arange(window_number) * window_size
 
+    lidar_profile = lidar_profile[:, :-30]
+
     _, ax = plt.subplots(figsize=(5, 7))
     for i in range(window_number):
-        plt.plot(lidar_profile[0+i], np.arange(lidar_profile.shape[1]), color="k", lw=0.5)
+        ax.plot(lidar_profile[150+i], np.arange(lidar_profile.shape[1]), color="k", lw=0.5)
     ax.yaxis.set_major_formatter(format_heights)
+    ax.set_xlabel("Lidar signal [a.u.]")
+    ax.set_ylabel("Height [m]")
+    ax.locator_params(nbins=5)
+    ax2 = ax.twiny()
     
-    plt.show()
+    
 
     variance = np.zeros([window_number, lidar_profile.shape[1]])
 
@@ -106,6 +112,13 @@ def variance_pbl(
         # variance = np.hstack([variance, var_window])
 
     variance_vote = np.argmax(variance, axis=1)
+    print(variance.shape)
+    
+    ax2.plot(variance[15, :], np.arange(lidar_profile.shape[1]), color="orange",  label="Variance method")
+    ax2.set_xlabel("Variance [a.u.]")
+    ax2.legend()
+
+    plt.show()
 
     return window_element, variance_vote
 
@@ -127,20 +140,37 @@ def wavelet_pbl(
     a: int = 4,
 ) -> np.ndarray:
 
-    def single_row_wavelet(row: np.ndarray) -> np.ndarray:
-        res = np.zeros(row.shape)
+    print(a)
 
-        for [idx], _  in np.ndenumerate(row):
-            _fn = row * haar(row.shape[0], a, (2*idx + 1) / 2)
-            _int = np.sum(_fn)
-            res[idx] += _int
-        res[0:a] = np.nan
-        res[-a:] = np.nan
+    _, ax = plt.subplots(figsize=(5, 7))
+    ax.plot(lidar_profile[150], np.arange(lidar_profile[0].size), color="skyblue", label="RCS profile")
+    ax.yaxis.set_major_formatter(format_heights)
+    ax.set_xlabel("Lidar signal [a.u.]")
+    ax.set_ylabel("Height [m]")
+    ax.locator_params(nbins=5)
+    ax2 = ax.twiny()
 
-        return res / np.sqrt(a)
+    for a in np.arange(1, 10, 2):
+        def single_row_wavelet(row: np.ndarray) -> np.ndarray:
+            res = np.zeros(row.shape)
 
-    wavelets = np.apply_along_axis(single_row_wavelet, 1, lidar_profile)
-    wavelet_vote = np.nanargmax(wavelets, axis=1)
+            for [idx], _  in np.ndenumerate(row):
+                _fn = row * haar(row.shape[0], a, (2*idx + 1) / 2)
+                _int = np.sum(_fn)
+                res[idx] += _int
+            res[0:a] = np.nan
+            res[-a:] = np.nan
+
+            return res / np.sqrt(a)
+        wavelets = np.apply_along_axis(single_row_wavelet, 1, lidar_profile)
+        wavelet_vote = np.nanargmax(wavelets, axis=1)
+
+        ax2.plot(wavelets[150], np.arange(lidar_profile[0].size), lw=0.5, label=f"Wavelet a={a}")
+        ax2.set_xlabel("Wavelet [a.u.]")
+        ax2.legend()
+
+    plt.show()
+    
 
 
     return wavelet_vote

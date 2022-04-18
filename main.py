@@ -11,8 +11,8 @@ def main():
 
     # lidar_dataset.quicklook(max_height=2000)
     # lidar_dataset.gradient_pbl(min_height=400, max_height=1250, min_grad=-0.05)
-    lidar_dataset.variance_pbl(min_height=400, max_height=1250)
-    # lidar_dataset.wavelet_pbl(min_height=400, max_height=1250, a_meters= 4)
+    # lidar_dataset.variance_pbl(min_height=400, max_height=1250)
+    lidar_dataset.wavelet_pbl(min_height=400, max_height=1250, a_meters= 4)
 
     # lidar_dataset.show()
 
