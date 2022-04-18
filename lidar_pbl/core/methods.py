@@ -1,6 +1,13 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+from matplotlib.ticker import FuncFormatter
+from matplotlib import pyplot
+
+@FuncFormatter
+def format_heights(x, pos=None):
+    return f"{(x*3.75+95*3.75):.0f} m"
+
 
 def gradient_pbl(
     lidar_profile: np.ndarray,
@@ -21,6 +28,23 @@ def gradient_pbl(
     safe_profile = lidar_profile.copy()
     safe_profile[safe_profile <= 0] = 1e-10
     dimension = safe_profile.ndim
+
+    gradient = np.gradient(lidar_profile, axis=1)
+    _, ax = plt.subplots(figsize=(5, 7))
+    ax.plot(lidar_profile[0], np.arange(lidar_profile[0].size), color="skyblue", label="RCS profile")
+    ax.plot(np.gradient(np.log10(safe_profile))[1][0], np.arange(lidar_profile[0].size), color="skyblue", label="Logarithmic derivative")
+    # ax3 = ax.twinx()
+    # ax3.plot(np.gradient((safe_profile)**1/3)[1][0], np.arange(lidar_profile[0].size), color="skyblue", label="Cubic root derivative")
+    # ax.plot(lidar_profile[0], np.arange(lidar_profile[0].size), color="skyblue", label="RCS profile")
+    ax2 = ax.twiny()
+    ax2.plot(gradient[0], np.arange(gradient[0].size), color="salmon", linestyle="--", label="First derivative")
+    # ax.yaxis.set_major_formatter(format_heights)
+    # ax.legend()
+    ax2.legend()
+    # ax3.legend()
+    ax.locator_params(nbins=5)
+    plt.show()
+
 
     if dimension == 1:
         gradient = np.gradient(np.log10(safe_profile))
@@ -60,6 +84,13 @@ def variance_pbl(
 
     window_number = lidar_profile.shape[0] // window_size
     window_element = np.arange(window_number) * window_size
+
+    _, ax = plt.subplots(figsize=(5, 7))
+    for i in range(window_number):
+        plt.plot(lidar_profile[0+i], np.arange(lidar_profile.shape[1]), color="k", lw=0.5)
+    ax.yaxis.set_major_formatter(format_heights)
+    
+    plt.show()
 
     variance = np.zeros([window_number, lidar_profile.shape[1]])
 
@@ -103,7 +134,6 @@ def wavelet_pbl(
             _fn = row * haar(row.shape[0], a, (2*idx + 1) / 2)
             _int = np.sum(_fn)
             res[idx] += _int
-        
         res[0:a] = np.nan
         res[-a:] = np.nan
 

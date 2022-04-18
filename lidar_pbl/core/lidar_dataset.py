@@ -115,15 +115,16 @@ class LidarDataset:
         points = gradient_pbl(
             self.rcs[:, min_height_index:height_index], min_grad=min_grad
         )
+        print(f"index: {min_height_index - self.bin_zero}")
 
-        plt.scatter(
-            np.arange(points.size),
-            points - self.bin_zero + min_height_index,
-            marker="^",
-            label=f"Gradient method",
-            alpha=0.5,
-            s=15,
-        )
+        # plt.scatter(
+        #     np.arange(points.size),
+        #     points - self.bin_zero + min_height_index,
+        #     marker="^",
+        #     label=f"Gradient method",
+        #     alpha=0.5,
+        #     s=15,
+        # )
 
     def variance_pbl(self, max_height=3000, min_height=0, window_size=10):
         height_index = np.searchsorted(self.heights, max_height)
@@ -155,7 +156,7 @@ class LidarDataset:
     def wavelet_pbl(self, max_height=3000, min_height=0, a_meters: float = 20):
         height_index = np.searchsorted(self.heights, max_height)
         min_height_index = np.searchsorted(self.heights, min_height)
-        a = a_meters // self.bin_res
+        a = int(a_meters // self.bin_res)
 
         points = wavelet_pbl(self.rcs[:, min_height_index:height_index], a=a)
 
@@ -166,6 +167,6 @@ class LidarDataset:
             label=f"Wavelet method",
             alpha=0.5,
             s=15,
-            c="k",
+            c="blueviolet",
         )
 
