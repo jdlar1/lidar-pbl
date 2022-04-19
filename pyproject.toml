@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "lidar-pbl"
-version = "0.0.2"
+version = "0.1.0"
 description = "Package in development that contains functions and command line utitlities to handle lidar data and PBL height calculations"
 authors = ["Juan Diego <jdidelarc@gmail.com>"]
 repository = "https://github.com/jdlar1/lidar-pbl"
