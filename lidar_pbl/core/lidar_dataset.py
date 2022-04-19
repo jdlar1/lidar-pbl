@@ -10,15 +10,10 @@ from lidar_pbl.utils import (
     rcs,
     quicklook,
     read_txts,
-    txt_to_npz,
 )
 
 
 class LidarDataset:
-    """
-    Class to handle Lidar data.
-    """
-
     def __init__(
         self,
         data_dir: pathlib.Path | str,
