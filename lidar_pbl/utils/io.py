@@ -19,14 +19,17 @@ def read_txts(
     txts = list(map(str, pathlib.Path(dirpath).glob("*.txt")))
     txts.sort()
     res = [
-        re.match(r"^.+(RS|DC)(\d{2})(\d{1})(\d{2})(\d{2})\.(\d{2})(\d{2})\d+\.txt$", txt)
+        re.match(
+            r"^.+(RS|DC)(\d{2})(\d{1})(\d{2})(\d{2})\.(\d{2})(\d{2})\d+\.txt$", txt
+        )
         for txt in txts
     ]
     dates = [
         pendulum.parse(
             f"20{res.group(2)}-0{res.group(3)}-{res.group(4)}T{res.group(5)}:{res.group(6)}:{res.group(7)}"
         )
-        for res in res if res is not None
+        for res in res
+        if res is not None
     ]
     data = [np.loadtxt(txt, skiprows=5) for txt in txts]
 

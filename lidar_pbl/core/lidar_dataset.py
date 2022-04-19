@@ -59,7 +59,7 @@ class LidarDataset:
             else:
                 dark_current_matrix, _ = read_txts(dark_current_path)
 
-        dark_current_mean = dark_current_matrix.mean(axis = 0)
+        dark_current_mean = dark_current_matrix.mean(axis=0)
         dark_current = np.tile(dark_current_mean, (temp_data.shape[0], 1))
 
         try:
