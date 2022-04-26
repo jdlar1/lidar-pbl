@@ -130,9 +130,9 @@ class LidarDataset:
         plt.scatter(
             np.arange(points.size),
             points - self.bin_zero + min_height_index,
-            marker="^",
+            marker="o",
             label=f"Gradient method",
-            alpha=0.5,
+            color="dodgerblue",
             s=15,
         )
 
@@ -146,11 +146,10 @@ class LidarDataset:
         plt.scatter(
             element + window_size // 2,
             variance - self.bin_zero + min_height_index,
-            marker="o",
+            marker="*",
             label=f"Variance method",
-            alpha=0.5,
-            s=15,
-            c="g",
+            s=25,
+            c="deeppink",
         )
 
     def wavelet_pbl(self, max_height=3000, min_height=0, a_meters: float = 20):

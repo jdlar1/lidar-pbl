@@ -65,7 +65,7 @@ def quicklook(
         "cmap": "jet",
         "interpolation": "antialiased",
         "origin": "lower",
-        "norm": colors.LogNorm(vmax=data.max() * 0.004, clip=True),
+        "norm": colors.LogNorm(vmin=1.9e4, vmax=data.max() * 0.004, clip=True),
     }
 
     fig, ax = plt.subplots(figsize=(12, 5))
