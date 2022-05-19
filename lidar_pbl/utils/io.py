@@ -31,7 +31,7 @@ def read_txts(
         for res in res
         if res is not None
     ]
-    data = [np.loadtxt(txt, skiprows=5) for txt in txts]
+    data = np.array([np.loadtxt(txt, skiprows=5) for txt in txts])
 
     cache_file = pathlib.Path(dirpath) / ".cache.npz"
     np.savez(cache_file, data=data, dates=dates)
@@ -52,7 +52,7 @@ def read_npz(
     """
     npz = np.load(filepath, allow_pickle=True)
 
-    return npz["data"], npz["dates"]
+    return np.array(npz["data"]), npz["dates"]
 
 
 def txt_to_npz(
@@ -82,7 +82,7 @@ def txt_to_npz(
         )
         for res in res
     ]
-    data = [np.loadtxt(txt, skiprows=5) for txt in txts]
+    data = np.array([np.loadtxt(txt, skiprows=5) for txt in txts])
     filepath_output = (
         filepath_output
         if filepath_output.endswith(".npz")

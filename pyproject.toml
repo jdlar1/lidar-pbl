@@ -15,12 +15,16 @@ pandas = "^1.4.1"
 pendulum = "^2.1.2"
 matplotlib = "^3.5.1"
 toml = "^0.10.2"
+atmospheric-lidar = "^0.5.4"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"
 black = "^22.1.0"
 ipykernel = "^6.9.2"
 flake8 = "^4.0.1"
+pycairo = "^1.21.0"
+PyGObject = "^3.42.1"
+notebook = "^6.4.11"
 
 [tool.poetry.scripts]
 lidar-pbl = "lidar_pbl.cli.app:run"
