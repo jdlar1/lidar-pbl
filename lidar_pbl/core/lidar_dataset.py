@@ -62,10 +62,15 @@ class LidarDataset:
         dark_current_mean = dark_current_matrix.mean(axis=0)
         dark_current = np.tile(dark_current_mean, (temp_data.shape[0], 1))
 
+        if np.ndim(temp_data) >=  3:
+            temp_data = temp_data[:, :, 0]
+
+        dark_current = dark_current[:16380, :]
+
         try:
             self.data = temp_data - dark_current
         except ValueError:
-            raise ValueError("The data and dark current must have the same shape")
+            raise ValueError(f"The data_shape es {temp_data.shape} and the dark_current_shape is {dark_current.shape}, and shout be the same")
 
         self.dark_current = dark_current
         temp_data: np.ndarray = temp_data - self.dark_current

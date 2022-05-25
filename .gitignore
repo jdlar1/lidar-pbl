@@ -157,3 +157,5 @@ cython_debug/
 data/
 testing.ipynb
 main.py
+
+netcdf4-python/

@@ -5,6 +5,10 @@ import pendulum
 import numpy as np
 
 
+REGEX_FILE = r"^.+(RS|DC)(\d{2})(\d{1})(\d{2})(\d{2})\.(\d{2})(\d{2})\d+\.txt$"
+SKIPPED_ROWS = 5, 8
+
+
 def read_txts(
     dirpath: pathlib.Path | str,
 ) -> tuple[np.ndarray, list[pendulum.DateTime]]:
@@ -18,12 +22,7 @@ def read_txts(
     """
     txts = list(map(str, pathlib.Path(dirpath).glob("*.txt")))
     txts.sort()
-    res = [
-        re.match(
-            r"^.+(RS|DC)(\d{2})(\d{1})(\d{2})(\d{2})\.(\d{2})(\d{2})\d+\.txt$", txt
-        )
-        for txt in txts
-    ]
+    res = [re.match(REGEX_FILE, txt) for txt in txts]
     dates = [
         pendulum.parse(
             f"20{res.group(2)}-0{res.group(3)}-{res.group(4)}T{res.group(5)}:{res.group(6)}:{res.group(7)}"
@@ -31,7 +30,8 @@ def read_txts(
         for res in res
         if res is not None
     ]
-    data = np.array([np.loadtxt(txt, skiprows=5) for txt in txts])
+
+    data = np.array([np.loadtxt(txt, skiprows=SKIPPED_ROWS[0]) for txt in txts])
 
     cache_file = pathlib.Path(dirpath) / ".cache.npz"
     np.savez(cache_file, data=data, dates=dates)
@@ -72,17 +72,14 @@ def txt_to_npz(
     """
     txts = list(map(str, pathlib.Path(dirpath).glob("*.txt")))
     txts.sort()
-    res = [
-        re.match(r"^.+RS/RS(\d{2})(\d)(\d{2})(\d{2})\.(\d{2})(\d{2})\d+\.txt$", txt)
-        for txt in txts
-    ]
+    res = [re.match(REGEX_FILE, txt) for txt in txts]
     dates = [
         pendulum.parse(
             f"20{res.group(1)}-0{res.group(2)}-{res.group(3)}T{res.group(4)}:{res.group(5)}:{res.group(6)}"
         )
         for res in res
     ]
-    data = np.array([np.loadtxt(txt, skiprows=5) for txt in txts])
+    data = np.array([np.loadtxt(txt, skiprows=SKIPPED_ROWS[0]) for txt in txts])
     filepath_output = (
         filepath_output
         if filepath_output.endswith(".npz")

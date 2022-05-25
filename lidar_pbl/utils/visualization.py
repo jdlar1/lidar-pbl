@@ -84,7 +84,7 @@ def quicklook(
     def format_dates(x, pos=None):
         if x >= dates.shape[0]:
             return ""
-        return dates[int(x)].format("HH:mm:ss")
+        return dates[int(x)].format("HH:mm")
 
     ax.yaxis.set_major_formatter(format_heights)
     ax.xaxis.set_major_formatter(format_dates)
