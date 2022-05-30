@@ -58,7 +58,7 @@ def quicklook(
         )
     else:
         index = np.searchsorted(heights, max_height)
-        data, h = bin2d[:, bin_zero:index].T, heights[bin_zero:index]
+        data, h = bin2d[:, bin_zero:index].T, heights[:index - bin_zero]
 
     params = {
         "aspect": "auto",
@@ -72,13 +72,13 @@ def quicklook(
 
     ax.imshow(data, **params)
 
-    ax.set(xlabel="Time", ylabel="Height [m]", title="Lidar Scan")
+    ax.set(xlabel="Time", ylabel="Height [m]")
 
     @FuncFormatter
     def format_heights(x, pos=None):
         if x >= h.shape[0]:
             return ""
-        return f"{h[int(x)]}"
+        return f"{h[int(x)]:.0f}"
 
     @FuncFormatter
     def format_dates(x, pos=None):

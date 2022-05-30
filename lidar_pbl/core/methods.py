@@ -1,6 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+import seaborn as sns
+
+# Apply the default theme
+sns.set_theme()
+
 
 def gradient_pbl(
     lidar_profile: np.ndarray,
@@ -37,7 +42,6 @@ def gradient_pbl(
 
     if max_grad is not None:
         gradient[gradient < min_grad] = 0
-    gradient[gradient > 0] = 0
     # gradient2[gradient2 > 0] = 0
 
     # plt.plot(gradient[num][10:final])
@@ -49,6 +53,29 @@ def gradient_pbl(
 
     min_axis = 0 if dimension == 1 else 1
     mins = np.argmin(gradient, axis=min_axis)
+
+    current_index = 80
+
+    heights = np.arange(lidar_profile.shape[1]) * 3.75 + 400
+
+    palette = sns.color_palette()
+
+    fig, ax = plt.subplots(figsize=(6, 13))
+    ax.plot(np.log10(safe_profile)[current_index], heights, label="RCS profile", color=palette[1], linewidth=1)
+    ax2 = ax.twiny()
+    ax2.plot(gradient[current_index], heights, label="Gradient method", color=palette[0], linewidth=1)
+
+    ax2.legend(loc="upper left")
+    ax.legend(loc="upper right")
+
+    ax.set(xlabel="RCS log10 [a.u]", ylabel="Height [m]")
+    ax2.set(xlabel="Gradient [a.u]")
+
+    ax2.grid(False)
+
+    fig.savefig("gradient.png", dpi=600)
+    # plt.show()
+
 
     return mins
 
@@ -75,6 +102,13 @@ def variance_pbl(
         # variance = np.hstack([variance, var_window])
 
     variance_vote = np.argmax(variance, axis=1)
+
+    palette = sns.color_palette()
+
+    fig, ax = plt.subplots(figsize=(6, 13))
+    sns
+
+    fig.savefig("gradient.png", dpi=600)
 
     return window_element, variance_vote
 
