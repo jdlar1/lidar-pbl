@@ -105,10 +105,31 @@ def variance_pbl(
 
     palette = sns.color_palette()
 
-    fig, ax = plt.subplots(figsize=(6, 13))
-    sns
+    current_index = 80
+    heights = np.arange(lidar_profile.shape[1]) * 3.75 + 400
 
-    fig.savefig("gradient.png", dpi=600)
+    fig, ax = plt.subplots(figsize=(6, 13))
+
+    window = lidar_profile[current_index: current_index + window_size, :]
+
+    maxes = np.nanmax(window, axis=0)
+    mins = np.nanmin(window, axis=0)
+
+    # ax.plot(lidar_profile[current_index], heights, label="RCS profile (10 values)", color=palette[0], linewidth=1)
+    ax.fill_betweenx(heights, mins, maxes, alpha = 0.5, color = palette[0], label="RCS window (10 values)")
+    ax2 = ax.twiny()
+
+    ax2.plot(variance[8],heights, label="Variance method", color=palette[1])
+
+    ax.set(xlabel="RCS [a.u]", ylabel="Height [m]")
+    ax2.set(xlabel="Variance [a.u]")
+
+    ax.legend(loc="upper right")
+    ax2.legend(loc="upper left")
+    # ax2.legend(loc="upper left")
+    ax2.grid(False)
+
+    fig.savefig("variance.png", dpi=600)
 
     return window_element, variance_vote
 
@@ -144,5 +165,38 @@ def wavelet_pbl(
 
     wavelets = np.apply_along_axis(single_row_wavelet, 1, lidar_profile)
     wavelet_vote = np.nanargmax(wavelets, axis=1)
+
+    palette = sns.color_palette()
+
+    current_index = 80
+
+    heights = np.arange(lidar_profile.shape[1]) * 3.75 + 400
+
+    fig, ax = plt.subplots(1, 2,figsize=(12, 13), sharey=True)
+    row = lidar_profile[current_index]
+
+    ax[0].plot(row, heights, color=palette[0], linewidth=2, label="RCS profile")
+    # ax[0]fill_betweenx(heights, mins, maxes, alpha = 0.5, color = palette[0], label="RCS window (10 values)")
+    ax2 = ax[1]
+
+    # ax2.plot(variance[8],heights, label="Variance method", color=palette[1], linewidth = 5)
+
+    ax[0].set(xlabel="RCS [a.u]", ylabel="Height [m]")
+    ax2.set(xlabel="Wavelet [a.u]")
+
+    plt.locator_params(axis='x', nbins=5)
+
+    ranging = np.arange(1, 40, 11)
+    for c, i in enumerate(ranging):
+        a = i
+        ax2.plot(single_row_wavelet(row), heights, color=palette[c + 1], linewidth=0.8, label=f"a = {a * 3.75} m")
+
+
+    ax[0].legend(loc="upper right")
+    ax2.legend(loc="upper right")
+    # ax2.legend(loc="upper left")
+    # ax2.grid(False)
+
+    fig.savefig("wavelet.png", dpi=600)
 
     return wavelet_vote
