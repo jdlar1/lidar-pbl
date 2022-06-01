@@ -58,26 +58,29 @@ def gradient_pbl(
     min_axis = 0 if dimension == 1 else 1
     mins = np.argmin(gradient, axis=min_axis)
 
-    current_index = 80
+    # current_index = 80
 
-    heights = np.arange(lidar_profile.shape[1]) * 3.75 + 400
+    # try:
+    #     heights = np.arange(lidar_profile.shape[1]) * 3.75 + 400
+    # except IndexError:
+    #     heights = np.arange(lidar_profile.shape[0]) * 3.75 + 400
 
-    palette = sns.color_palette()
+    # palette = sns.color_palette()
 
-    fig, ax = plt.subplots(figsize=(7, 13))
-    ax.plot(np.log10(safe_profile)[current_index], heights, label="RCS profile", color=palette[0], linewidth=1.5)
-    ax2 = ax.twiny()
-    ax2.plot(gradient[current_index], heights, label="Gradient method", color=palette[1], linewidth=1.5)
+    # fig, ax = plt.subplots(figsize=(7, 13))
+    # # ax.plot(np.log10(safe_profile)[current_index], heights, label="RCS profile", color=palette[0], linewidth=1.5)
+    # ax2 = ax.twiny()
+    # ax2.plot(gradient[current_index], heights, label="Gradient method", color=palette[1], linewidth=1.5)
 
-    ax.legend(loc="upper left", fontsize="medium")
-    ax2.legend(loc="upper right", fontsize="medium")
+    # ax.legend(loc="upper left", fontsize="medium")
+    # ax2.legend(loc="upper right", fontsize="medium")
 
-    ax.set(xlabel="RCS log10 [a.u]", ylabel="Height [m]")
-    ax2.set(xlabel="Gradient [a.u]")
+    # ax.set(xlabel="RCS log10 [a.u]", ylabel="Height [m]")
+    # ax2.set(xlabel="Gradient [a.u]")
 
-    ax2.grid(False)
+    # ax2.grid(False)
 
-    fig.savefig("gradient.png", dpi=600)
+    # fig.savefig("gradient.png", dpi=600)
     # plt.show()
 
 

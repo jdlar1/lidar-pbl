@@ -128,18 +128,23 @@ class LidarDataset:
         """
         height_index = np.searchsorted(self.heights, max_height)
         min_height_index = np.searchsorted(self.heights, min_height)
+
+        integrated_profile = np.mean(self.rcs[:, min_height_index:height_index], axis=1)
+
         points = gradient_pbl(
-            self.rcs[:, min_height_index:height_index], min_grad=min_grad
+            integrated_profile, min_grad=min_grad
         )
 
-        plt.scatter(
-            np.arange(points.size),
-            points - self.bin_zero + min_height_index,
-            marker="2",
-            label=f"Gradient method",
-            color="dodgerblue",
-            s=125,
-        )
+        print(points)
+
+        # plt.scatter(
+        #     np.arange(points.size),
+        #     points - self.bin_zero + min_height_index,
+        #     marker="2",
+        #     label=f"Gradient method",
+        #     color="dodgerblue",
+        #     s=125,
+        # )
 
     def variance_pbl(self, max_height=3000, min_height=0, window_size=10):
         height_index = np.searchsorted(self.heights, max_height)
