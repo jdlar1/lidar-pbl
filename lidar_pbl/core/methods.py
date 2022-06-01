@@ -6,6 +6,10 @@ import seaborn as sns
 # Apply the default theme
 sns.set_theme()
 
+sns.set(
+    font_scale=1.4,
+)
+
 
 def gradient_pbl(
     lidar_profile: np.ndarray,
@@ -60,13 +64,13 @@ def gradient_pbl(
 
     palette = sns.color_palette()
 
-    fig, ax = plt.subplots(figsize=(6, 13))
-    ax.plot(np.log10(safe_profile)[current_index], heights, label="RCS profile", color=palette[1], linewidth=1)
+    fig, ax = plt.subplots(figsize=(7, 13))
+    ax.plot(np.log10(safe_profile)[current_index], heights, label="RCS profile", color=palette[0], linewidth=1.5)
     ax2 = ax.twiny()
-    ax2.plot(gradient[current_index], heights, label="Gradient method", color=palette[0], linewidth=1)
+    ax2.plot(gradient[current_index], heights, label="Gradient method", color=palette[1], linewidth=1.5)
 
-    ax2.legend(loc="upper left")
-    ax.legend(loc="upper right")
+    ax.legend(loc="upper left", fontsize="medium")
+    ax2.legend(loc="upper right", fontsize="medium")
 
     ax.set(xlabel="RCS log10 [a.u]", ylabel="Height [m]")
     ax2.set(xlabel="Gradient [a.u]")
@@ -108,7 +112,7 @@ def variance_pbl(
     current_index = 80
     heights = np.arange(lidar_profile.shape[1]) * 3.75 + 400
 
-    fig, ax = plt.subplots(figsize=(6, 13))
+    fig, ax = plt.subplots(figsize=(7, 13))
 
     window = lidar_profile[current_index: current_index + window_size, :]
 
@@ -124,12 +128,16 @@ def variance_pbl(
     ax.set(xlabel="RCS [a.u]", ylabel="Height [m]")
     ax2.set(xlabel="Variance [a.u]")
 
-    ax.legend(loc="upper right")
-    ax2.legend(loc="upper left")
+    lines, labels = ax.get_legend_handles_labels()
+    lines2, labels2 = ax2.get_legend_handles_labels()
+
+    # ax.legend(loc="upper right")
     # ax2.legend(loc="upper left")
+    ax2.legend(lines + lines2, labels + labels2, loc=0)
     ax2.grid(False)
 
     fig.savefig("variance.png", dpi=600)
+    # plt.show()
 
     return window_element, variance_vote
 
