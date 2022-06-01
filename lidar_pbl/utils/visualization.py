@@ -88,6 +88,6 @@ def quicklook(
 
     ax.yaxis.set_major_formatter(format_heights)
     ax.xaxis.set_major_formatter(format_dates)
-    fig.autofmt_xdate(rotation=45)
+    # fig.autofmt_xdate(rotation=45)
 
     fig.colorbar(ax.images[0], ax=ax, label="Lidar Signal [a.u.]")
